@@ -1,0 +1,261 @@
+
+\input{config/colores}
+%-------Comandos-------------%
+\newcommand{\modulo}[1]{\left \| {#1} \right \|}
+\newcommand{\parentesis}[1]{\left ( {#1} \right )}
+\newcommand{\corchete}[1]{\left [ {#1} \right ]}
+\newcommand{\llave}[1]{\left \{ {#1} \right \}}
+\newcommand{\absoluto}[1]{\left | {#1} \right |}
+\newcommand{\newp}{\hbadness=10000 \vspace{11 pt} \par} 
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
+\newcommand{\uveci}{{\bm{\hat{\textnormal{\bfseries\i}}}}}
+\newcommand{\uvecj}{{\bm{\hat{\textnormal{\bfseries\j}}}}}
+\DeclareRobustCommand{\uvec}[1]{{%
+  \ifcat\relax\noexpand#1%
+    % it should be a Greek letter
+    \bm{\hat{#1}}%
+  \else
+    \ifcsname uvec#1\endcsname
+      \csname uvec#1\endcsname
+    \else
+      \bm{\hat{\mathbf{#1}}}%
+     \fi
+   \fi
+}}
+
+\newcommand*\Eval[3]{\left.#1\right\rvert_{#2}^{#3}}
+
+
+
+%----Entorno Demostración---%
+\def\proof{{\newp \textbf{Demostraci\'on.}}}
+\def\endproof{\hfill$\blacksquare$}
+%------------------------------%
+
+
+
+%----------Entorno problema-----------%
+
+\makeatletter
+\newtheoremstyle{blacknumexocresq}
+{5pt}
+{5pt}
+{\normalfont}
+{} 
+{\normalsize\bf\rmfamily}
+{\;}
+{0.25em}
+{\normalsize\rmfamily{\color{terracota}\scriptsize\ensuremath{\square\raise0.2em\hbox to 0.2em{\hss$\blacksquare$}}}\nobreakspace\thmname{#1}\nobreakspace\thmnumber{\@ifnotempty{#1}{}\@upn{#2}}% 
+\thmnote{\nobreakspace\the\thm@notefont\rmfamily\bfseries---\nobreakspace#3.}.}
+\def\BState{\State\hskip-\ALG@thistlm}
+
+
+
+
+\def\ifNum#1{\ifnum#1\relax
+  \expandafter\pgfutil@firstoftwo\else
+  \expandafter\pgfutil@secondoftwo\fi}
+\forestset{
+  num content/.style={
+    delay={
+      content/.expanded={\noexpand\num{\forestoption{content}}}}},
+  pt@prime/.style={draw, circle},
+  pt@start/.style={},
+  pt@normal/.style={},
+  start primeTree/.style={%
+    /utils/exec=%
+      % \pt@start holds the current minimum factor, we'll start with 2
+      \def\pt@start{2}%
+      % \pt@result will hold the to-be-typeset factorization, we'll start with
+      % \pgfutil@gobble since we don't want a initial \times
+      \let\pt@result\pgfutil@gobble
+      % \pt@start@cnt holds the number of ^factors for the current factor
+      \def\pt@start@cnt{0}%
+      % \pt@lStart will later hold "l"ast factor used
+      \let\pt@lStart\pgfutil@empty,
+    alias=pt-start,
+    pt@start/.try,
+    delay={content/.expanded={$\noexpand\num{\forestove{content}}
+                            \noexpand\mathrlap{{}= \noexpand\pt@result}$}},
+    primeTree},
+  primeTree/.code=%
+    % take the content of the node and save it in the count
+    \c@pgf@counta\forestove{content}\relax
+    % if it's 2 we're already finished with the factorization
+    \ifNum{\c@pgf@counta=2}{%
+      % add the factor
+      \pt@addfactor{2}%
+      % finalize the factorization of the result
+      \pt@addfactor{}%
+      % and set the style to the prime style
+      \forestset{pt@prime/.try}%
+    }{%
+      % this simply calculates content/2 and saves it in \pt@end
+      % this is later used for an early break of the recursion since no factor
+      % can be greater then content/2 (for integers of course)
+      \edef\pt@content{\the\c@pgf@counta}%
+      \divide\c@pgf@counta2\relax
+      \advance\c@pgf@counta1\relax % to be on the safe side
+      \edef\pt@end{\the\c@pgf@counta}%
+      \pt@do}}
+
+%%% our main "function"
+\def\pt@do{%
+  % let's test if the current factor is already greather then the max factor
+  \ifNum{\pt@end<\pt@start}{%
+    % great, we're finished, the same as above
+    \expandafter\pt@addfactor\expandafter{\pt@content}%
+    \pt@addfactor{}%
+    \def\pt@next{\forestset{pt@prime/.try}}%
+  }{%
+    % this calculates int(content/factor)*factor
+    % if factor is a factor of content (without remainder), the result will
+    % equal content. The int(content/factor) is saved in \pgf@temp.
+    \c@pgf@counta\pt@content\relax
+    \divide\c@pgf@counta\pt@start\relax
+    \edef\pgf@temp{\the\c@pgf@counta}%
+    \multiply\c@pgf@counta\pt@start\relax
+    \ifNum{\the\c@pgf@counta=\pt@content}{%
+      % yeah, we found a factor, add it to the result and ...
+      \expandafter\pt@addfactor\expandafter{\pt@start}%
+      % ... add the factor as the first child with style pt@prime
+      % and the result of int(content/factor) as another child.
+      \edef\pt@next{\noexpand\forestset{%
+        append={[\pt@start, pt@prime/.try]},
+        append={[\pgf@temp, pt@normal/.try]},
+        % forest is complex, this makes sure that for the second child, the
+        % primeTree style is not executed too early (there must be a better way).
+        delay={
+          for descendants={
+            delay={if n'=1{primeTree, num content}{}}}}}}%
+    }{%
+      % Alright this is not a factor, let's get the next factor
+      \ifNum{\pt@start=2}{%
+        % if the previous factor was 2, the next one will be 3
+        \def\pt@start{3}%
+      }{%
+        % hmm, the previos factor was not 2,
+        % let's add 2, maybe we'll hit the next prime number
+        % and maybe a factor
+        \c@pgf@counta\pt@start
+        \advance\c@pgf@counta2\relax
+        \edef\pt@start{\the\c@pgf@counta}%
+      }%
+      % let's do that again
+      \let\pt@next\pt@do
+    }%
+  }%
+  \pt@next
+}
+
+%%% this builds the \pt@result macro with the factors
+\def\pt@addfactor#1{%
+  \def\pgf@tempa{#1}%
+  % is it the same factor as the previous one
+  \ifx\pgf@tempa\pt@lStart
+    % add 1 to the counter
+    \c@pgf@counta\pt@start@cnt\relax
+    \advance\c@pgf@counta1\relax
+    \edef\pt@start@cnt{\the\c@pgf@counta}%
+  \else
+    % a new factor! Add the previous one to the product of factors
+    \ifx\pt@lStart\pgfutil@empty\else
+      % as long as there actually is one, the \ifnum makes sure we do not add ^1
+      \edef\pgf@tempa{\noexpand\num{\pt@lStart}\ifnum\pt@start@cnt>1 
+                                           ^{\noexpand\num{\pt@start@cnt}}\fi}%
+      \expandafter\pt@addfactor@\expandafter{\pgf@tempa}%
+    \fi
+    % setup the macros for the next round
+    \def\pt@lStart{#1}% <- current (new) factor
+    \def\pt@start@cnt{1}% <- first time
+  \fi
+}
+%%% This simply appends "\times #1" to \pt@result, with etoolbox this would be
+%%% \appto\pt@result{\times#1}
+\def\pt@addfactor@#1{%
+  \expandafter\def\expandafter\pt@result\expandafter{\pt@result \times #1}}
+
+%%% Our main macro:
+%%% #1 = possible optional argument for forest (can be tikz too)
+%%% #2 = the number to factorize
+\newcommand*{\PrimeTree}[2][]{%
+  \begin{forest}%
+    % as the result is set via \mathrlap it doesn't update the bounding box
+    % let's fix this:
+    tikz={execute at end scope={\pgfmathparse{width("${}=\pt@result$")}%
+                         \path ([xshift=\pgfmathresult pt]pt-start.east);}},
+    % other optional arguments
+    #1
+    % And go!
+    [#2, start primeTree]
+  \end{forest}}
+
+
+\makeatother
+
+\theoremstyle{blacknumexocresq}
+\newtheorem{problema}{Problema}
+
+
+
+
+
+
+
+%-------------------------------------------------------------%
+
+
+%------Entorno solución-------%
+\theoremstyle{definition}
+\newtheorem{solucion}{Solución}
+
+\def\solucion{\paragraph{{\color{terracota}\scriptsize\ensuremath{\square\raise0.2em\hbox to 0.2em{\hss$\blacksquare$}}}{ Solución.\hspace{-2mm}}}}
+%--------------------------------%
+
+%-------Otros entornos-----------%
+\theoremstyle{definition}
+\newtheorem{teorema}{Teorema}[section]
+
+\theoremstyle{definition}
+\newtheorem{lema}{Lema}[section]
+
+\theoremstyle{definition}
+\newtheorem{proposicion}{Proposición}[section]
+
+\theoremstyle{definition}
+\newtheorem{definicion}{Definición}[section]
+
+\theoremstyle{definition}
+\newtheorem{corolario}{Corolario}[section]
+
+\theoremstyle{definition}
+\newtheorem{axioma}{Axioma}[section]
+%------------------------------------%
+
+
+%-----Entorno de ecuaciones------------%
+\tcbset{colback=terracota!10!white, colframe=terracota!50!black, 
+        highlight math style= {enhanced, 
+            colframe=red,colback=terracota!20!white,boxsep=0pt}
+        }
+%--------------------------------------%
+\renewcommand*\footnoterule{}
+
+\ifthenelse{\equal{\tipo}{ejercitario}}{
+  \numberwithin{figure}{problema}
+	\numberwithin{equation}{problema}
+}{}
+
+\ifthenelse{\equal{\tipo}{resumen}}{
+  \numberwithin{figure}{section}
+	\numberwithin{equation}{section}
+	\numberwithin{problema}{section}
+}{}
+
+
+
+
+
+
+
