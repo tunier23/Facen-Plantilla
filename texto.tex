@@ -1,0 +1,169 @@
+
+%------Sección 1------------%
+\section{Creando trabajos en \LaTeX}
+
+Hoy hablaremos de la energía cuántica y las frecuencias ideales en las cuales nos conviene vibrar.
+
+%Subsección 1.1%
+\subsection{Ejemplo sencillo}
+
+Con esta plantilla podrás crear varios tipos de documentos y tendrás varios recursos para utilizar. 
+
+\newp Con el comando \verb|\newp| podrás crear nuevos párrafos, con el comando  \verb|\newpage| nuevas páginas. También añadir pies de páginas\footnote{Pie de página fachera} con el comando \verb|\footnote{texto}|.
+
+%Subsección 1.2%
+\subsection{Insertando figuras}
+Insertar figuras es muy sencillo, se utiliza el entorno \verb|figure|, un ejemplo de como añadirlo es con el código
+\verbatiminput{ejemplos/imagen}
+
+\newp \verb|[!htbp]| hará que la imagen aparezca en el lugar que lo añadimos, \verb|\centering| hará que la imagen esté centrada, \verb|\includegraphics[scale=valor]{ruta}| en scale se especifica el tamaño de la imagen y en ruta, la ubicación, por ejemplo \verb|img/grafico1.png| \verb|\caption{Descripción chida}| aquí va la descripción de la imagen en caso de que la tenga y \verb|label{fig:etiqueta}| aquí colocas una etiqueta en caso de que quieras referenciar la imagen (ej., Fig. \ref{fig:figura1}) .
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[scale=0.28]{img/grafico1.jpg}
+    \caption{Descripción chida}
+    \label{fig:figura1}
+\end{figure}
+
+\newpage
+%Sección 2%
+\section{Tipos de trabajos}
+Este trabajo soporta dos tipos: resumen y ejercitario.
+
+%Subsección 2.1%
+\subsection{Resumen}
+En el modo resumen el trabajo adoptará cierta forma, como la que estás leyendo ahora, la diferencia es el enumerado de las imágenes, ecuaciones, etc. que se enumeran por las secciones.
+
+%Subsección 2.2%
+\subsection{Ejercitario}
+En el modo ejercitario se asume que no habrá secciones por lo que las imagenes, ecuaciones, etc. se enumeran de acuerdo al número de problema.
+
+
+\section{Entornos propios}
+Hay algunos entornos propios de esta plantilla, por ejemplo, el entorno problema 
+
+\subsection{El entorno problema-solución}
+Ideal para entorno de problemas (xd), por ejemplo, el siguiente código genera 
+\verbatiminput{ejemplos/problema}
+
+\begin{problema}
+    Sean $x, y, z, n$ un números enteros y $n \ge 3$, demuestre que se cumple la siguiente igualdad:
+    $$ x^n + y^n = z^n $$
+\end{problema}
+
+Acompañado de su solución o demostración, como gusten.
+\verbatiminput{ejemplos/demostracion}
+\begin{proof}
+    La demostración es trivial y se deja como ejercicio al lector.
+\end{proof}
+
+\verbatiminput{ejemplos/solucion}
+\begin{solucion}
+    Preguntenle a Andrew Wiles.
+\end{solucion}
+
+\newpage
+\subsection{Entornos matemáticos}
+
+\begin{definicion}
+    Este es el entorno Definición que se utiliza con el comando \verb|definicion|.
+\end{definicion}
+
+\begin{proposicion}
+    Este es el entorno Proposición que se utiliza con el comando \verb|proposicion|.
+\end{proposicion}
+
+\begin{lema}
+    Este es el entorno Lema que se utiliza con el comando \verb|lema|.
+\end{lema}
+
+\begin{axioma}
+    Este es el entorno Axioma que se utiliza con el comando \verb|Axioma|.
+\end{axioma}
+
+\begin{teorema}
+    Este es el entorno Teorema que se utiliza con el comando \verb|teorema|.
+\end{teorema}
+
+\begin{corolario}
+    Este es el entorno Corolario que se utiliza con el comando \verb|corolario|.
+\end{corolario}
+
+
+\section{Ecuaciones}
+En esta sección veremos algunos entornos para ecuaciones, delimitadores y notaciones.
+
+\subsection{Entorno ecuación}
+Un entorno simple para ecuaciones es el siguiente \ref{eqn:ecuacion1}
+\verbatiminput{ejemplos/ecuacion1}
+\begin{equation}
+    x^2 + y^2 = z^2 
+    \label{eqn:ecuacion1}
+\end{equation}
+
+Otra opción más \textit{elegante} es utilizar el siguiente comando:
+\verbatiminput{ejemplos/ecuacion2}
+\begin{equation}
+    \tcboxmath{ 
+    x^2 + y^2 = z^2
+    }
+    \label{eqn:ecuacion2}
+\end{equation}
+
+\subsection{Delimitadores}
+Los delimitadores propios de la plantilla son
+\begin{itemize}
+    \item \verb|\parentesis{x^2}|  $\parentesis{x^2}$
+    \item \verb|\corchete{x^2}|  $\corchete{x^2}$
+    \item \verb|\llave{x^2}|  $\llave{x^2}$
+    \item \verb|\modulo{x^2}|  $\modulo{x^2}$
+    \item \verb|\absoluto{x^2}|  $\absoluto{x^2}$
+\end{itemize}
+
+\newpage
+\subsection{Notaciones}
+Así también se incorporan notaciones matemáticas, algunas de ellas son
+\begin{itemize}
+    \item \verb|\vec{v}| notación para vectores $\vec{v}$.
+    \item \verb|\uvec{e}| notación para vectores unitarios $\uvec{e}$.
+    \item \verb|\expval{x,y,z}| notación para vectores en componentes $\expval{x,y,z}$.
+    \item \verb|\Eval{F(x)}{a}{b}| evaluar expresiones $\int_a^b f(x)\, dx=\Eval{F(x)}{a}{b}$.
+\end{itemize}
+
+
+\section{Integración con otros paquetes}
+
+\subsection{Tikz}
+Esta plantilla contiene varias librerías del paquete tikz, para más información \href{https://www.bu.edu/math/files/2013/08/tikzpgfmanual.pdf}{aquí}.
+
+\newp Con tikz podrás hacer muchos gráficos, diagramas, etc. algunos ejemplos:
+
+\input{ejemplos/tikz1} 
+\input{ejemplos/tikz2}
+\input{ejemplos/tikz3}
+\input{ejemplos/tikz4}
+
+
+
+\subsection{PrimeTree}
+Con este comando se crea un árbol de factores primos, por ejemplo \verb|\PrimeTree{23100}| genera lo siguiente:       
+
+\PrimeTree{23100}
+
+\subsection{CircuiTikz}
+Ideal para crear circuitos, más información sobre el paquete \href{https://texdoc.org/serve/circuitikz/0}{aquí}.
+
+\input{ejemplos/circuit}
+
+
+
+
+
+
+
+
+
+
+
+
+
