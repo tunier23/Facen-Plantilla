@@ -1,0 +1,18 @@
+%-----Circuito con tikz-----------%
+\begin{figure}[H]
+     \centering
+      \begin{circuitikz}[american, cute inductors]
+     \draw (0,0) to[sV=$\varepsilon (t)$,fill=yellow] (0,4);
+     \draw (0,3.01) to[short, f>_=$I(t)$] (0,3.02);
+     \draw (0,4) to[R, l=$R$, *-*] (4,4) to[L, l=$L$, *-*] (8,4) ;
+     \draw (2,3) node[above]{$\varepsilon_R (t)$};
+     \draw (6,3) node[above]{$\varepsilon_L (t)$};
+    \draw (8,4) to[C, l=$C$, *-*] (8,0);
+    \draw (9,2) node[right]{$\varepsilon_C (t)$};
+    \draw (8,0) -- (0,0);
+    \draw (8,0) to[short, -o] (10,0);
+    \draw (8,4) to[short, -o] (10,4);
+    \end{circuitikz}
+     \caption{Circuito RLC en serie.}
+     \label{fig:rlcEQ}
+ \end{figure}

@@ -1,0 +1,61 @@
+ \begin{figure}[H]
+     \centering
+     \begin{tikzpicture}[scale=0.65]
+        \def\clr{olive}
+        
+        \def\a{3} \def\b{9} 
+        
+        \newcommand{\xt}[1]{(\b-\a)*cos(#1)+\a*cos((\b-\a)*#1/\a}
+        \newcommand{\yt}[1]{(\b-\a)*sin(#1)-\a*sin((\b-\a)*#1/\a}
+
+        
+        \draw[-latex] (-\b-1,0) -- (\b+1,0) node[right] {$x_1$};
+        \draw[-latex] (0,-\b-1) -- (0,\b+1) node[above] {$x_2$};
+        
+
+        \draw[\clr,thick] (0,0) circle (\b);
+        
+
+        \draw[\clr,dashed,very thin] (0,0) circle (\b-\a);
+
+        \draw[line width=2pt,orange!80!red] plot[samples=100,domain=0:\a*360,smooth,variable=\t] ({\xt{\t}},{\yt{\t}});
+
+        
+        \def\t0{40}
+        \draw[\clr!50!black] (\t0:\b-\a) circle (\a);
+        \draw[purple,fill] ({\xt{\t0}},{\yt{\t0}}) circle (2pt) -- (\t0:\b-\a) circle (1pt) node [midway, sloped, above right] {\small $r $} -- (0,0) circle (1pt) node [midway, sloped, above left] {\scriptsize $r_0 - r$} node [below right] {$O$};
+        
+        \draw (0,0) -- (\b+1,\b-0.55);
+         \draw[purple,fill] (\b-2.15,\b-3.17) circle (2pt) node[above] {$B$};
+        \draw ({\xt{\t0}},{\yt{\t0}}) node[below] {$P$};
+        \draw[purple,fill] (\b,0) circle (2pt) node[above right] {$D$};
+        
+         \coordinate (D) at (\b,0);
+          \coordinate (O) at (0,0);
+          \coordinate (B) at (\b-2.15,\b-3.17);
+          \coordinate (P) at ({\xt{\t0}},{\yt{\t0}});
+          
+        
+        \pic [draw, -latex, "$\theta$", angle eccentricity=1.5, angle radius=0.7cm] {angle = D--O--B};
+        
+         \draw[purple,fill] (4.6,3.9) circle (2pt);
+          \coordinate (A) at (4.6,3.9);
+          
+          
+          \draw[purple,fill] (7.6,3.9) circle (2pt);
+          \coordinate (C) at (7.6,3.9);
+          
+          \pic [draw, -latex, "$\theta$", angle eccentricity=1.5, angle radius=0.6cm] {angle = C--A--B};
+          
+          \draw (A) -- (C);
+          
+          \draw (5.4,-6.8) node[above] {$C_0$};
+          
+          \pic [draw, purple, latex-, "$\phi$", angle eccentricity=1.2, angle radius=1.1cm] {angle = P--A--B};
+          
+          \draw (4.5,0) node[below] {$r_0$};
+        
+    \end{tikzpicture}
+     \caption{Hipocicloide.}
+     \label{fig:5.1}
+ \end{figure}

@@ -1,0 +1,20 @@
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[%
+angle eccentricity=1.2,
+ball/.style={circle, inner sep=0pt, minimum size=2mm, draw=black, fill=terracota!50,  label=right:$m$}]
+
+\draw[thick, black] (-2,0) --(2,0);
+\draw[black] (0,0) coordinate (b0) foreach \i [count=\ni] in {-70,-55} {--++(\i:2cm) node[midway,auto]{$L$} node[ball] (b\ni) {}};
+
+\foreach \i [count=\auxi] in {b0,b1}{
+    \draw[dashed,black] (\i)--++(-90:1.8cm) coordinate[pos=.75] (aux\auxi);
+} 
+
+\draw pic["$\theta_1$", draw, black, angle radius=1.2cm] {angle=aux1--b0--b1};
+\draw pic["$\theta_2$", draw, black, angle radius=1.2cm] {angle=aux2--b1--b2};
+
+\end{tikzpicture}
+\caption{El temible péndulo doble.}
+\label{fig:5.3}
+\end{figure}

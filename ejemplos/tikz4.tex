@@ -1,0 +1,36 @@
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\coordinate (origen) at (0,0);
+\coordinate (i) at (3,0);
+\coordinate (imax) at (3,3);
+
+\draw[->] (-1,0)--(4,0) node[right]{$\Re{I}$};
+\draw[->] (0,-1)--(0,4) node[above]{$\Im{I}$};
+\draw (0,0) node[below left]{$0$};
+\draw[line width=2pt,blue,-stealth](0,0)--(3,3) node[anchor=south west, above left]{${I_0}$};
+\draw[line width=2pt,lila,-stealth](0,0)--(3,0) node[anchor=south west, below left]{${I = I_0 \cos{\omega t}}$};
+\draw[dashed] (3,0) -- (3,3);
+
+\pic [draw, ->, "$\omega t$", angle radius=1cm, angle eccentricity=1.4] {angle = i--origen--imax};
+
+\draw [celeste, dashed, <-, thick] plot [smooth, tension=0.5] coordinates {   (1.5,1.8) (1.3,3) (2,4) (3,4.5)} [anchor= west] node{\emph{\textcolor{celeste}{La longitud del
+fasor es igual a la corriente máxima $I_0$.}}};
+
+\draw [black, ->, thick] plot [smooth, tension=1] coordinates {  (3.6, 2.8) (3.3,3.3) (2.8, 3.6)};
+
+\draw[thick] (3.6,3.25) node [above, sloped] (TextNode) {$\omega$};
+
+\draw [celeste, dashed, <-, thick] plot [smooth, tension=0.5] coordinates {   (3.7,3.1) (4.5,3.1) } [anchor= west] node{\emph{\textcolor{celeste}{El fasor gira con
+frecuencia $f$ y rapidez angular $\omega = 2 \pi f$.}}};
+
+\draw [celeste, dashed, <-, thick] plot [smooth, tension=1] coordinates {   (2.5,0.31) (3,0.77) (3.5,1.05) (4,1.27) (5,1.61) } [anchor= west] node{\emph{  \begin{tabular}{l}
+     \textcolor{celeste}{La proyección del fasor sobre el eje horizontal  }  \\
+     \textcolor{celeste}{en el  tiempo $t$ es igual a la corriente $I$en ese}  \\
+     \textcolor{celeste}{ instante: $I=I_0 \cos{\omega t}$.}
+\end{tabular}  }};
+
+\end{tikzpicture}
+\caption{Diagrama fasorial de la corriente $I$.}
+\label{fig:fasorsencillo}
+\end{figure}
